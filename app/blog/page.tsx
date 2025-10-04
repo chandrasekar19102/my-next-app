@@ -1,6 +1,6 @@
 export default async function BlogList() {
-  const raw_res = await fetch("https://jsonplaceholder.typicode.com/posts");
-  const posts = await raw_res.json();
+  const raw_res = await fetch("https://jsonplaceholder.typicode.com/posts"); // raw result from api
+  const posts = await raw_res.json(); // into javascript json object
 
   return (
     <section>
