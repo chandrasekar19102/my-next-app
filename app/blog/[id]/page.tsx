@@ -1,25 +1,23 @@
+import { notFound } from "next/navigation";
+
 export default async function BlogPost({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
+    next: { revalidate: 5 }, // re-generate at most once per minute
+  });
+  if (!res.ok) return notFound();
 
-  const url = `https://jsonplaceholder.typicode.com/posts/${id}`;
-  const raw_res = await fetch(url);
-
-  if (!raw_res.ok) {
-    return <h1>Failed to fetch post</h1>;
-  }
-
-  const post: { id: number; title: string; body: string } =
-    await raw_res.json();
+  const post = await res.json();
+  if (!post?.id) return notFound(); // extra safety
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-2">Blog Post ID: {post.id}</h1>
-      <h2 className="text-xl mb-2">{post.title}</h2>
+    <article>
+      <h1 className="text-2xl font-bold mb-2">{post.title}</h1>
       <p>{post.body}</p>
-    </div>
+    </article>
   );
 }

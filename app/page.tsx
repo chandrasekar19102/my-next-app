@@ -1,4 +1,5 @@
 import Link from "next/link";
+import UserInfo from "./component/UserInfo";
 
 export default function Home() {
   return (
